@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && tsc-alias",
     "start": "node dist/index.js",
     "dev": "nodemon --watch src --exec \"npm start\" --ext ts",
     "prestart": "npm run build"
@@ -12,24 +12,38 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/genai": "^0.10.0",
+    "axios": "^1.9.0",
+    "bullmq": "^5.51.1",
+    "colorette": "^2.0.20",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "morgan": "^1.10.0"
+    "ioredis": "^5.6.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
+    "uuid": "^11.1.0",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.10.6",
-    "colorette": "^2.0.20",
+    "@types/uuid": "^10.0.0",
+    "@types/xml2js": "^0.4.14",
     "concurrently": "^9.1.2",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.15",
+    "tsconfig-paths": "^4.2.0",
+    "ttsc": "^0.3.1",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "typescript-transform-paths": "^3.5.5"
   }
 }
