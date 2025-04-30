@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import {DocumentBlock, DocumentStatus} from "./types/document.types.ts";
 import {StatusIcon} from "./components/status-icons/status-icons.tsx";
+import {LlmResponse} from "./components/llm-response/llm-response.tsx";
 
 
 function App() {
@@ -181,20 +182,26 @@ function App() {
     }
   };
 
-  const handleAskGemini = async () => {
-    if (!processedFileId || currentStatus !== 'ready_to_ask') {
+  const handleAskLlm = async () => {
+    if (!processedFileId || !['ready_to_ask', 'processed'].includes(currentStatus)) {
+      setError('Cannot ask: No file processed successfully or not ready.');
       return;
     }
     if (!prompt.trim()) {
+      setError('Please enter a prompt.');
       return;
     }
     if (selectedBlockIds.length === 0) {
-      if (!window.confirm("No document blocks selected. The prompt will be sent without document context. Continue?")) return;
+      if (!window.confirm("No document blocks selected. The prompt will be sent without document context. Continue?")) {
+        return;
+      }
     }
+
     setCurrentStatus('asking_llm');
     setError('');
     setLlmResponse('');
     setStatusMessage('🤖 Asking Gemini...');
+
     try {
       const response = await askLlm(processedFileId, prompt, selectedBlockIds);
       setLlmResponse(response.data.response);
@@ -210,7 +217,7 @@ function App() {
   };
 
   const isProcessingOrAsking = ['uploading', 'polling_status', 'processing', 'asking_llm'].includes(currentStatus);
-  const isReadyToAsk = currentStatus === 'ready_to_ask';
+  const canInteractWithPrompt = ['ready_to_ask', 'processed'].includes(currentStatus);
   const hasProcessedSuccessfully = currentStatus === 'processed';
   const hasFailed = currentStatus === 'failed';
 
@@ -261,34 +268,38 @@ function App() {
           {processedFileId && <p className="details"><small>File ID: {processedFileId}</small></p>}
         </section>
 
-        {isReadyToAsk && (
+
+        {canInteractWithPrompt && (
           <section
-            className={`step step-select ${selectedBlockIds.length > 0 ? 'step-complete' : ''} ${isProcessingOrAsking || hasProcessedSuccessfully ? 'step-disabled' : ''}`}>
+            className={`step step-select ${selectedBlockIds.length > 0 ? 'step-complete' : ''} ${isProcessingOrAsking  ? 'step-disabled' : ''}`}>
             <h2><FaCheckCircle className="step-icon"/> 2. Select Content Blocks</h2>
             <BlockSelector
               blocks={processedBlocks}
               selectedBlockIds={selectedBlockIds}
               onSelectionChange={setSelectedBlockIds}
-              disabled={isProcessingOrAsking || hasProcessedSuccessfully}
+              disabled={isProcessingOrAsking}
             />
           </section>
         )}
 
-        {isReadyToAsk && (
+        {canInteractWithPrompt && (
           <section
-            className={`step step-ask ${prompt.trim() ? 'step-complete' : ''} ${isProcessingOrAsking || hasProcessedSuccessfully ? 'step-disabled' : ''}`}>
+            className={`step step-ask ${prompt.trim() ? 'step-complete' : ''} ${isProcessingOrAsking ? 'step-disabled' : ''}`}>
             <h2><FaQuestionCircle className="step-icon"/> 3. Ask Gemini</h2>
             <textarea
               rows={5}
               placeholder="Enter your question or instructions based on the selected blocks..."
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              disabled={isProcessingOrAsking || hasProcessedSuccessfully}
+              disabled={isProcessingOrAsking}
             />
-            <button onClick={handleAskGemini}
-                    disabled={!prompt.trim() || !isReadyToAsk || isProcessingOrAsking || hasProcessedSuccessfully}
+            <button onClick={handleAskLlm}
+                    disabled={!prompt.trim() || isProcessingOrAsking}
                     className='button-primary ask-button'>
-              Ask Gemini
+              {
+                currentStatus === 'asking_llm' ? ("Asking...") : (hasProcessedSuccessfully ? "Ask Again" : "Ask Gemini")
+              }
+
             </button>
           </section>
         )}
@@ -296,16 +307,12 @@ function App() {
         {hasProcessedSuccessfully && llmResponse && (
           <section className="step step-result">
             <h2><FaRobot className="step-icon"/> 4. LLM Response</h2>
-            <div className="response-area">
-              <pre>{llmResponse}</pre>
-            </div>
-            <button onClick={() => resetState()} className="button-secondary">Start Over</button>
+            <LlmResponse response={llmResponse}/>
           </section>
         )}
         {hasFailed && (
           <button onClick={() => resetState()} className="button-secondary">Try Again</button>
         )}
-
       </main>
     </div>
   );

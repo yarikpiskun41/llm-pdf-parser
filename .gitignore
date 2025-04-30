@@ -4,6 +4,7 @@
 */**/build
 *.log
 *.env
+.env.client
 
 logs
 npm-debug.log*
@@ -18,7 +19,6 @@ dist-ssr
 
 backend/dist
 frontend/dist
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
@@ -27,3 +27,4 @@ frontend/dist
 *.njsproj
 *.sln
 *.sw?
+/backend/dist/

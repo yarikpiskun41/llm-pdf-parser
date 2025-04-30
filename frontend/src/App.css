@@ -177,19 +177,6 @@ button.button-secondary:hover:not(:disabled) {
 .ask-button {
   width: 100%;
 }
-.response-area pre {
-  background-color: #edf2f7;
-  padding: 1rem;
-  border-radius: 4px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Courier New', Courier, monospace;
-  max-height: 500px;
-  overflow-y: auto;
-  border: 1px solid #e2e8f0;
-  color: #2d3748;
-  font-size: 0.95em;
-}
 
 
 .step-disabled {

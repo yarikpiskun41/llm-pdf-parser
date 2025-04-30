@@ -51,7 +51,7 @@ const startServer = async () => {
 
 
     const server = app.listen(port, () => {
-      console.log(`Backend server running in TypeScript at http://localhost:${port}`);
+      console.log(`Backend server running at http://localhost:${port}`);
       console.log('GROBID Worker is running and listening for jobs.');
     });
 

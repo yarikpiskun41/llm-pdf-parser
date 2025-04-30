@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc && tsc-alias",
+    "build": "npx tsc && npx tsc-alias",
     "start": "node dist/index.js",
     "dev": "nodemon --watch src --exec \"npm start\" --ext ts",
     "prestart": "npm run build"
@@ -41,7 +41,6 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.15",
     "tsconfig-paths": "^4.2.0",
-    "ttsc": "^0.3.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0",
     "typescript-transform-paths": "^3.5.5"

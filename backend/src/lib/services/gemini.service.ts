@@ -28,7 +28,7 @@ export const generateContentWithGemini = async (prompt: string, contextSections:
   }
   const fullPrompt = `${combinedContext}\nUser Prompt: ${prompt}`;
 
-  console.log("[GeminiService] Sending prompt to Gemini:", fullPrompt);
+  console.log("[GeminiService] Sending prompt to Gemini");
 
 
   try {
